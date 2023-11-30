@@ -21,7 +21,6 @@ using NinjaTrader.NinjaScript;
 using NinjaTrader.NinjaScript.Indicators.Sharpe;
 using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.NinjaScript.DrawingTools;
-using RedisBoost;
 #endregion
 
 //This namespace holds Indicators in this folder and is required. Do not change it. 
@@ -74,7 +73,6 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 		
 		private int previousDirection, currentDirection;
 		
-		private IRedisClientsPool pool;
 		private double rstats;
 		
 		protected override void OnStateChange()
@@ -152,9 +150,7 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 				sma		= SMA(BBPeriod);
 				stdDev	= StdDev(BBPeriod);
 				
-				var masterName = this.Instrument.FullName.Split(' ')[0];
-				pool = RedisClient.CreateClientsPool();
-				rstats = BHKLRoot.GetRedisKey(pool, masterName, this);
+				rstats = BHKLRoot.GetRedisValue(this);
 			}
 		}
 

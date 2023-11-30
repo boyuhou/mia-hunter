@@ -18,7 +18,6 @@ using NinjaTrader.Gui.Tools;
 using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
-using RedisBoost;
 using NinjaTrader.NinjaScript.DrawingTools;
 #endregion
 
@@ -27,7 +26,6 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
 	public class RangeStats : Indicator
 	{
-		private IRedisClientsPool pool;
 		private double rstats;
 		
 		protected override void OnStateChange()
@@ -60,8 +58,7 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 			else if (State == State.DataLoaded)
 			{
 				var masterName = this.Instrument.FullName.Split(' ')[0];
-				pool = RedisClient.CreateClientsPool();
-				rstats = BHKLRoot.GetRedisKey(pool, masterName, this);
+				rstats = BHKLRoot.GetRedisValue(this);
 			}
 		}
 
