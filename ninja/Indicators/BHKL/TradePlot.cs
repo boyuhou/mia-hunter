@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,14 +28,15 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
 	public class TradePlot : Indicator
 	{
+		private List<MyOrder> myOrders = new List<MyOrder>();
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
 			{
 				Description									= @"";
-				Name										= "TradePlot";
+				Name										= "BHKL Trade Plot";
 				Calculate									= Calculate.OnBarClose;
-				IsOverlay									= false;
+				IsOverlay									= true;
 				DisplayInDataBox							= true;
 				DrawOnPricePanel							= true;
 				DrawHorizontalGridLines						= true;
@@ -47,12 +50,113 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 			else if (State == State.Configure)
 			{
 			}
+			else if (State == State.DataLoaded)
+			{
+				LoadFile();
+				int counter = 1;
+				foreach (MyOrder myOrder in myOrders)
+				{
+					if (myOrder.Action.Equals("BUY", StringComparison.InvariantCultureIgnoreCase))
+					{
+						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Green);
+					}
+					else if (myOrder.Action.Equals("SELL", StringComparison.InvariantCultureIgnoreCase))
+					{
+						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Red);
+					}
+					else 
+					{
+						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Purple);
+					}
+					counter++;
+				}
+			}
 		}
 
 		protected override void OnBarUpdate()
 		{
 			//Add your custom indicator logic here.
 		}
+		
+		private void LoadFile()
+		{
+			if (!File.Exists(FilePath))
+			{
+				return;
+			}
+			string[] formats = {"yyyy-MM-dd HH:mm:ss", "M/d/yyyy H:mm","yyyy-MM-dd HH:mm","yyyy-MM-dd H:mm"};
+			
+			using(var fs = File.OpenRead(FilePath))
+			using(var reader = new StreamReader(fs))
+			{
+				while(!reader.EndOfStream)
+				{
+					DateTime entryTime;
+					DateTime exitTime;
+					
+					var line = reader.ReadLine();
+                    var values = line.Split(',');
+					string ticker = values[0];
+					if (!ticker.Equals(this.Instrument.FullName, StringComparison.InvariantCultureIgnoreCase))
+						continue;
+					
+					var amount = values[1];
+					
+					if (!DateTime.TryParseExact(values[2], formats, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out entryTime))
+					{
+						throw new Exception(line);
+					}
+					
+					var entryPrice = Double.Parse(values[3]);
+					var stopPrice = Double.Parse(values[4]);
+					
+					if (!DateTime.TryParseExact(values[5], formats, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out exitTime))
+					{
+						throw new Exception(line);
+					}
+					
+					var exitPrice = Double.Parse(values[6]);
+					var direction = values[7];
+					
+					
+					if (direction.Equals("Long", StringComparison.InvariantCultureIgnoreCase))
+					{
+						this.myOrders.Add(new MyOrder("BUY", entryPrice, amount, entryTime));
+						this.myOrders.Add(new MyOrder("SELL", exitPrice, amount, exitTime));
+						this.myOrders.Add(new MyOrder("STOP", stopPrice, amount, entryTime));
+					}
+					else
+					{
+						this.myOrders.Add(new MyOrder("SELL", entryPrice, amount, entryTime));
+						this.myOrders.Add(new MyOrder("BUY", exitPrice, amount, exitTime));
+						this.myOrders.Add(new MyOrder("STOP", stopPrice, amount, entryTime));
+					}
+				}
+			}
+		}
+		
+		public class MyOrder
+		{
+			public string Action {get; set;}
+			public string Quantity {get; set;}
+			public double AvgPrice {get; set;}
+			public DateTime Time {get; set;}
+			
+			public MyOrder(string Action, double AvgPrice, string Quantity, DateTime Time)
+			{
+				this.Action = Action;
+				this.AvgPrice = AvgPrice;
+				this.Quantity = Quantity;
+				this.Time = Time;
+			}
+		}
+		
+		#region Properties
+		[NinjaScriptProperty]
+		[Display(Name="FilePath", Order=0, GroupName="Parameters")]
+		public string FilePath
+		{ get; set; }
+		#endregion
 	}
 }
 
@@ -63,18 +167,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private BHKL.TradePlot[] cacheTradePlot;
-		public BHKL.TradePlot TradePlot()
+		public BHKL.TradePlot TradePlot(string filePath)
 		{
-			return TradePlot(Input);
+			return TradePlot(Input, filePath);
 		}
 
-		public BHKL.TradePlot TradePlot(ISeries<double> input)
+		public BHKL.TradePlot TradePlot(ISeries<double> input, string filePath)
 		{
 			if (cacheTradePlot != null)
 				for (int idx = 0; idx < cacheTradePlot.Length; idx++)
-					if (cacheTradePlot[idx] != null &&  cacheTradePlot[idx].EqualsInput(input))
+					if (cacheTradePlot[idx] != null && cacheTradePlot[idx].FilePath == filePath && cacheTradePlot[idx].EqualsInput(input))
 						return cacheTradePlot[idx];
-			return CacheIndicator<BHKL.TradePlot>(new BHKL.TradePlot(), input, ref cacheTradePlot);
+			return CacheIndicator<BHKL.TradePlot>(new BHKL.TradePlot(){ FilePath = filePath }, input, ref cacheTradePlot);
 		}
 	}
 }
@@ -83,14 +187,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.TradePlot TradePlot()
+		public Indicators.BHKL.TradePlot TradePlot(string filePath)
 		{
-			return indicator.TradePlot(Input);
+			return indicator.TradePlot(Input, filePath);
 		}
 
-		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input )
+		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input , string filePath)
 		{
-			return indicator.TradePlot(input);
+			return indicator.TradePlot(input, filePath);
 		}
 	}
 }
@@ -99,14 +203,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.TradePlot TradePlot()
+		public Indicators.BHKL.TradePlot TradePlot(string filePath)
 		{
-			return indicator.TradePlot(Input);
+			return indicator.TradePlot(Input, filePath);
 		}
 
-		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input )
+		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input , string filePath)
 		{
-			return indicator.TradePlot(input);
+			return indicator.TradePlot(input, filePath);
 		}
 	}
 }
