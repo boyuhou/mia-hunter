@@ -24,7 +24,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class BollingerFill : Indicator
+	public class BHKLBollingerFill : Indicator
 	{
 		private SMA		sma;
 		private StdDev	stdDev;
@@ -137,19 +137,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.BollingerFill[] cacheBollingerFill;
-		public BHKL.BollingerFill BollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
+		private BHKL.BHKLBollingerFill[] cacheBHKLBollingerFill;
+		public BHKL.BHKLBollingerFill BHKLBollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			return BollingerFill(Input, numStdDev, period, colorFill, opacityFill);
+			return BHKLBollingerFill(Input, numStdDev, period, colorFill, opacityFill);
 		}
 
-		public BHKL.BollingerFill BollingerFill(ISeries<double> input, double numStdDev, int period, Brush colorFill, int opacityFill)
+		public BHKL.BHKLBollingerFill BHKLBollingerFill(ISeries<double> input, double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			if (cacheBollingerFill != null)
-				for (int idx = 0; idx < cacheBollingerFill.Length; idx++)
-					if (cacheBollingerFill[idx] != null && cacheBollingerFill[idx].NumStdDev == numStdDev && cacheBollingerFill[idx].Period == period && cacheBollingerFill[idx].ColorFill == colorFill && cacheBollingerFill[idx].OpacityFill == opacityFill && cacheBollingerFill[idx].EqualsInput(input))
-						return cacheBollingerFill[idx];
-			return CacheIndicator<BHKL.BollingerFill>(new BHKL.BollingerFill(){ NumStdDev = numStdDev, Period = period, ColorFill = colorFill, OpacityFill = opacityFill }, input, ref cacheBollingerFill);
+			if (cacheBHKLBollingerFill != null)
+				for (int idx = 0; idx < cacheBHKLBollingerFill.Length; idx++)
+					if (cacheBHKLBollingerFill[idx] != null && cacheBHKLBollingerFill[idx].NumStdDev == numStdDev && cacheBHKLBollingerFill[idx].Period == period && cacheBHKLBollingerFill[idx].ColorFill == colorFill && cacheBHKLBollingerFill[idx].OpacityFill == opacityFill && cacheBHKLBollingerFill[idx].EqualsInput(input))
+						return cacheBHKLBollingerFill[idx];
+			return CacheIndicator<BHKL.BHKLBollingerFill>(new BHKL.BHKLBollingerFill(){ NumStdDev = numStdDev, Period = period, ColorFill = colorFill, OpacityFill = opacityFill }, input, ref cacheBHKLBollingerFill);
 		}
 	}
 }
@@ -158,14 +158,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.BollingerFill BollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
+		public Indicators.BHKL.BHKLBollingerFill BHKLBollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			return indicator.BollingerFill(Input, numStdDev, period, colorFill, opacityFill);
+			return indicator.BHKLBollingerFill(Input, numStdDev, period, colorFill, opacityFill);
 		}
 
-		public Indicators.BHKL.BollingerFill BollingerFill(ISeries<double> input , double numStdDev, int period, Brush colorFill, int opacityFill)
+		public Indicators.BHKL.BHKLBollingerFill BHKLBollingerFill(ISeries<double> input , double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			return indicator.BollingerFill(input, numStdDev, period, colorFill, opacityFill);
+			return indicator.BHKLBollingerFill(input, numStdDev, period, colorFill, opacityFill);
 		}
 	}
 }
@@ -174,14 +174,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.BollingerFill BollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
+		public Indicators.BHKL.BHKLBollingerFill BHKLBollingerFill(double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			return indicator.BollingerFill(Input, numStdDev, period, colorFill, opacityFill);
+			return indicator.BHKLBollingerFill(Input, numStdDev, period, colorFill, opacityFill);
 		}
 
-		public Indicators.BHKL.BollingerFill BollingerFill(ISeries<double> input , double numStdDev, int period, Brush colorFill, int opacityFill)
+		public Indicators.BHKL.BHKLBollingerFill BHKLBollingerFill(ISeries<double> input , double numStdDev, int period, Brush colorFill, int opacityFill)
 		{
-			return indicator.BollingerFill(input, numStdDev, period, colorFill, opacityFill);
+			return indicator.BHKLBollingerFill(input, numStdDev, period, colorFill, opacityFill);
 		}
 	}
 }

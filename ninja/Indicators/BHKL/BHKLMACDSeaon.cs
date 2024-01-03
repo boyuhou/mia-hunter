@@ -24,7 +24,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class MACDSeaon : Indicator
+	public class BHKLMACDSeaon : Indicator
 	{
 		private	Series<double>		fastEma;
 		private	Series<double>		slowEma;
@@ -222,19 +222,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.MACDSeaon[] cacheMACDSeaon;
-		public BHKL.MACDSeaon MACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		private BHKL.BHKLMACDSeaon[] cacheBHKLMACDSeaon;
+		public BHKL.BHKLMACDSeaon BHKLMACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			return MACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
+			return BHKLMACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
 		}
 
-		public BHKL.MACDSeaon MACDSeaon(ISeries<double> input, int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		public BHKL.BHKLMACDSeaon BHKLMACDSeaon(ISeries<double> input, int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			if (cacheMACDSeaon != null)
-				for (int idx = 0; idx < cacheMACDSeaon.Length; idx++)
-					if (cacheMACDSeaon[idx] != null && cacheMACDSeaon[idx].Fast == fast && cacheMACDSeaon[idx].Slow == slow && cacheMACDSeaon[idx].Smooth == smooth && cacheMACDSeaon[idx].ColorWinter == colorWinter && cacheMACDSeaon[idx].ColorFall == colorFall && cacheMACDSeaon[idx].ColorSummer == colorSummer && cacheMACDSeaon[idx].ColorSpring == colorSpring && cacheMACDSeaon[idx].EqualsInput(input))
-						return cacheMACDSeaon[idx];
-			return CacheIndicator<BHKL.MACDSeaon>(new BHKL.MACDSeaon(){ Fast = fast, Slow = slow, Smooth = smooth, ColorWinter = colorWinter, ColorFall = colorFall, ColorSummer = colorSummer, ColorSpring = colorSpring }, input, ref cacheMACDSeaon);
+			if (cacheBHKLMACDSeaon != null)
+				for (int idx = 0; idx < cacheBHKLMACDSeaon.Length; idx++)
+					if (cacheBHKLMACDSeaon[idx] != null && cacheBHKLMACDSeaon[idx].Fast == fast && cacheBHKLMACDSeaon[idx].Slow == slow && cacheBHKLMACDSeaon[idx].Smooth == smooth && cacheBHKLMACDSeaon[idx].ColorWinter == colorWinter && cacheBHKLMACDSeaon[idx].ColorFall == colorFall && cacheBHKLMACDSeaon[idx].ColorSummer == colorSummer && cacheBHKLMACDSeaon[idx].ColorSpring == colorSpring && cacheBHKLMACDSeaon[idx].EqualsInput(input))
+						return cacheBHKLMACDSeaon[idx];
+			return CacheIndicator<BHKL.BHKLMACDSeaon>(new BHKL.BHKLMACDSeaon(){ Fast = fast, Slow = slow, Smooth = smooth, ColorWinter = colorWinter, ColorFall = colorFall, ColorSummer = colorSummer, ColorSpring = colorSpring }, input, ref cacheBHKLMACDSeaon);
 		}
 	}
 }
@@ -243,14 +243,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.MACDSeaon MACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		public Indicators.BHKL.BHKLMACDSeaon BHKLMACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			return indicator.MACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
+			return indicator.BHKLMACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
 		}
 
-		public Indicators.BHKL.MACDSeaon MACDSeaon(ISeries<double> input , int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		public Indicators.BHKL.BHKLMACDSeaon BHKLMACDSeaon(ISeries<double> input , int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			return indicator.MACDSeaon(input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
+			return indicator.BHKLMACDSeaon(input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
 		}
 	}
 }
@@ -259,14 +259,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.MACDSeaon MACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		public Indicators.BHKL.BHKLMACDSeaon BHKLMACDSeaon(int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			return indicator.MACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
+			return indicator.BHKLMACDSeaon(Input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
 		}
 
-		public Indicators.BHKL.MACDSeaon MACDSeaon(ISeries<double> input , int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
+		public Indicators.BHKL.BHKLMACDSeaon BHKLMACDSeaon(ISeries<double> input , int fast, int slow, int smooth, Brush colorWinter, Brush colorFall, Brush colorSummer, Brush colorSpring)
 		{
-			return indicator.MACDSeaon(input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
+			return indicator.BHKLMACDSeaon(input, fast, slow, smooth, colorWinter, colorFall, colorSummer, colorSpring);
 		}
 	}
 }

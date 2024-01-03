@@ -27,25 +27,15 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns.BHKL
 {
 	public class PSARCountAnalyzer : MarketAnalyzerColumn
 	{
-		private double			af;				// Acceleration factor
-		private bool			afIncreased;
-		private bool			longPosition;
-		private int				prevBar;
-		private double			prevSAR;
-		private int				reverseBar;
-		private double			reverseValue;
-		private double			todaySAR;		// SAR value
-		private double			xp;				// Extreme Price
-		
-		private Series<double>	afSeries;
-		private Series<bool>	afIncreasedSeries;
-		private Series<bool>	longPositionSeries;
-		private Series<int>		prevBarSeries;
-		private Series<double>	prevSARSeries;
-		private Series<int>		reverseBarSeries;
-		private Series<double>	reverseValueSeries;
-		private Series<double>	todaySARSeries;
-		private Series<double>	xpSeries;
+		private double			af, afPrior;				// Acceleration factor
+		private bool			afIncreased, afIncreasedPrior;
+		private bool			longPosition, longPositionPrior;
+		private int				prevBar, prevBarPrior;
+		private double			prevSAR, prevSARPrior;
+		private int				reverseBar, reverseBarPrior;
+		private double			reverseValue, reverseValuePrior;
+		private double			todaySAR, todaySARPrior;		// SAR value
+		private double			xp, xpPrior;				// Extreme Price
 		
 		private double	avg;
 		private double	divisor;
@@ -98,19 +88,6 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns.BHKL
 			else if (State == State.DataLoaded)
 			{
 				sum = SUM(Inputs[0], Period);
-				
-				if (BarsArray[0].BarsType.IsRemoveLastBarSupported)
-				{
-					afSeries			= new Series<double>(this);
-					afIncreasedSeries	= new Series<bool>(this);
-					longPositionSeries	= new Series<bool>(this);
-					prevBarSeries		= new Series<int>(this);
-					prevSARSeries		= new Series<double>(this);
-					reverseBarSeries	= new Series<int>(this);
-					reverseValueSeries	= new Series<double>(this);
-					todaySARSeries		= new Series<double>(this);
-					xpSeries			= new Series<double>(this);
-				}
 
 				rl10 = new Series<double>(this);
 				psar = new Series<double>(this);
@@ -157,8 +134,10 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns.BHKL
 			#endregion
 			
 			#region PSAR Logic
-			if (CurrentBar < 3)
+			if (CurrentBar < 3){
 				return;
+			}
+				
 
 			if (CurrentBar == 3)
 			{
@@ -167,20 +146,31 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns.BHKL
 				xp				= longPosition ? MAX(rl10, CurrentBar)[0] : MIN(rl10, CurrentBar)[0];
 				af				= Acceleration;
 				psar[0]		= xp + (longPosition ? -1 : 1) * ((MAX(rl10, CurrentBar)[0] - MIN(rl10, CurrentBar)[0]) * af);
+				
 				return;
 			}
-			if (BarsArray[0].BarsType.IsRemoveLastBarSupported && CurrentBar < prevBar)
-			{
-				af				= afSeries[0];
-				afIncreased		= afIncreasedSeries[0];
-				longPosition	= longPositionSeries[0];
-				prevBar			= prevBarSeries[0];
-				prevSAR			= prevSARSeries[0];
-				reverseBar		= reverseBarSeries[0];
-				reverseValue	= reverseValueSeries[0];
-				todaySAR		= todaySARSeries[0];
-				xp				= xpSeries[0];
+		
+			if (IsFirstTickOfBar) {
+				afPrior				= af;
+				afIncreasedPrior	= afIncreased;
+				longPositionPrior	= longPosition;
+				prevBarPrior		= prevBar;
+				prevSARPrior		= prevSAR;
+				reverseBarPrior		= reverseBar;
+				reverseValuePrior	= reverseValue;
+				todaySARPrior		= todaySAR;
+				xpPrior				= xp;
 			}
+			af				= afPrior;
+			afIncreased		= afIncreasedPrior;
+			longPosition	= longPositionPrior;
+			prevBar			= prevBarPrior;
+			prevSAR			= prevSARPrior;
+			reverseBar		= reverseBarPrior;
+			reverseValue	= reverseValuePrior;
+			todaySAR		= todaySARPrior;
+			xp				= xpPrior;
+		
 
 			// Reset accelerator increase limiter on new bars
 			if (afIncreased && prevBar != CurrentBar)
@@ -265,19 +255,6 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns.BHKL
 			if ((longPosition && (rl10[0] < todaySAR || rl10[1] < todaySAR))
 				|| (!longPosition && (rl10[0] > todaySAR || rl10[1] > todaySAR)))
 				psar[0] = Reverse();
-
-			if (BarsArray[0].BarsType.IsRemoveLastBarSupported)
-			{
-				afSeries[0]				= af;
-				afIncreasedSeries[0]	= afIncreased;
-				longPositionSeries[0]	= longPosition;
-				prevBarSeries[0]		= prevBar;
-				prevSARSeries[0]		= prevSAR;
-				reverseBarSeries[0]		= reverseBar;
-				reverseValueSeries[0]	= reverseValue;
-				todaySARSeries[0]		= todaySAR;
-				xpSeries[0]				= xp;
-			}
 			#endregion
 			
 			

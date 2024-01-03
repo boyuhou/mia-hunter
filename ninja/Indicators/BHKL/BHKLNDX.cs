@@ -24,7 +24,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class NDX : Indicator
+	public class BHKLNDX : Indicator
 	{
 		private MAX max;
 		private MIN min;
@@ -34,7 +34,7 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 			if (State == State.SetDefaults)
 			{
 				Description									= @"";
-				Name										= "BHKL NDX";
+				Name										= "BHKL BHKLNDX";
 				Calculate									= Calculate.OnBarClose;
 				IsOverlay									= false;
 				DisplayInDataBox							= true;
@@ -99,19 +99,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.NDX[] cacheNDX;
-		public BHKL.NDX NDX(int period)
+		private BHKL.BHKLNDX[] cacheBHKLNDX;
+		public BHKL.BHKLNDX BHKLNDX(int period)
 		{
-			return NDX(Input, period);
+			return BHKLNDX(Input, period);
 		}
 
-		public BHKL.NDX NDX(ISeries<double> input, int period)
+		public BHKL.BHKLNDX BHKLNDX(ISeries<double> input, int period)
 		{
-			if (cacheNDX != null)
-				for (int idx = 0; idx < cacheNDX.Length; idx++)
-					if (cacheNDX[idx] != null && cacheNDX[idx].Period == period && cacheNDX[idx].EqualsInput(input))
-						return cacheNDX[idx];
-			return CacheIndicator<BHKL.NDX>(new BHKL.NDX(){ Period = period }, input, ref cacheNDX);
+			if (cacheBHKLNDX != null)
+				for (int idx = 0; idx < cacheBHKLNDX.Length; idx++)
+					if (cacheBHKLNDX[idx] != null && cacheBHKLNDX[idx].Period == period && cacheBHKLNDX[idx].EqualsInput(input))
+						return cacheBHKLNDX[idx];
+			return CacheIndicator<BHKL.BHKLNDX>(new BHKL.BHKLNDX(){ Period = period }, input, ref cacheBHKLNDX);
 		}
 	}
 }
@@ -120,14 +120,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.NDX NDX(int period)
+		public Indicators.BHKL.BHKLNDX BHKLNDX(int period)
 		{
-			return indicator.NDX(Input, period);
+			return indicator.BHKLNDX(Input, period);
 		}
 
-		public Indicators.BHKL.NDX NDX(ISeries<double> input , int period)
+		public Indicators.BHKL.BHKLNDX BHKLNDX(ISeries<double> input , int period)
 		{
-			return indicator.NDX(input, period);
+			return indicator.BHKLNDX(input, period);
 		}
 	}
 }
@@ -136,14 +136,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.NDX NDX(int period)
+		public Indicators.BHKL.BHKLNDX BHKLNDX(int period)
 		{
-			return indicator.NDX(Input, period);
+			return indicator.BHKLNDX(Input, period);
 		}
 
-		public Indicators.BHKL.NDX NDX(ISeries<double> input , int period)
+		public Indicators.BHKL.BHKLNDX BHKLNDX(ISeries<double> input , int period)
 		{
-			return indicator.NDX(input, period);
+			return indicator.BHKLNDX(input, period);
 		}
 	}
 }

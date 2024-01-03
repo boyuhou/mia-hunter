@@ -26,7 +26,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class SupportedSpringCrossing : Indicator
+	public class BHKLSupportedSpringCrossing : Indicator
 	{
 		private double			af;				// Acceleration factor
 		private bool			afIncreased;
@@ -82,9 +82,9 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 				Description									= @"Identify Possible SSC condition";
 				Name										= "BHKL Supported Spring Crossing";
 				Calculate									= Calculate.OnPriceChange;
-				IsOverlay									= true;
+				IsOverlay									= false;
 				DisplayInDataBox							= true;
-				DrawOnPricePanel							= true;
+				DrawOnPricePanel							= false;
 				DrawHorizontalGridLines						= true;
 				DrawVerticalGridLines						= true;
 				PaintPriceMarkers							= true;
@@ -95,7 +95,7 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 				
 				Acceleration				= 0.02;
 				AccelerationStep			= 0.02;
-				AccelerationMax				= 0.2;
+				AccelerationMax				= 0.14;
 				
 				Period						= 10;
 				
@@ -476,19 +476,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.SupportedSpringCrossing[] cacheSupportedSpringCrossing;
-		public BHKL.SupportedSpringCrossing SupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		private BHKL.BHKLSupportedSpringCrossing[] cacheBHKLSupportedSpringCrossing;
+		public BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			return SupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
+			return BHKLSupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
 		}
 
-		public BHKL.SupportedSpringCrossing SupportedSpringCrossing(ISeries<double> input, int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		public BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(ISeries<double> input, int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			if (cacheSupportedSpringCrossing != null)
-				for (int idx = 0; idx < cacheSupportedSpringCrossing.Length; idx++)
-					if (cacheSupportedSpringCrossing[idx] != null && cacheSupportedSpringCrossing[idx].Period == period && cacheSupportedSpringCrossing[idx].Acceleration == acceleration && cacheSupportedSpringCrossing[idx].AccelerationMax == accelerationMax && cacheSupportedSpringCrossing[idx].AccelerationStep == accelerationStep && cacheSupportedSpringCrossing[idx].BBNumStdDev == bBNumStdDev && cacheSupportedSpringCrossing[idx].BBPeriod == bBPeriod && cacheSupportedSpringCrossing[idx].RStatsGC3Ratio == rStatsGC3Ratio && cacheSupportedSpringCrossing[idx].EqualsInput(input))
-						return cacheSupportedSpringCrossing[idx];
-			return CacheIndicator<BHKL.SupportedSpringCrossing>(new BHKL.SupportedSpringCrossing(){ Period = period, Acceleration = acceleration, AccelerationMax = accelerationMax, AccelerationStep = accelerationStep, BBNumStdDev = bBNumStdDev, BBPeriod = bBPeriod, RStatsGC3Ratio = rStatsGC3Ratio }, input, ref cacheSupportedSpringCrossing);
+			if (cacheBHKLSupportedSpringCrossing != null)
+				for (int idx = 0; idx < cacheBHKLSupportedSpringCrossing.Length; idx++)
+					if (cacheBHKLSupportedSpringCrossing[idx] != null && cacheBHKLSupportedSpringCrossing[idx].Period == period && cacheBHKLSupportedSpringCrossing[idx].Acceleration == acceleration && cacheBHKLSupportedSpringCrossing[idx].AccelerationMax == accelerationMax && cacheBHKLSupportedSpringCrossing[idx].AccelerationStep == accelerationStep && cacheBHKLSupportedSpringCrossing[idx].BBNumStdDev == bBNumStdDev && cacheBHKLSupportedSpringCrossing[idx].BBPeriod == bBPeriod && cacheBHKLSupportedSpringCrossing[idx].RStatsGC3Ratio == rStatsGC3Ratio && cacheBHKLSupportedSpringCrossing[idx].EqualsInput(input))
+						return cacheBHKLSupportedSpringCrossing[idx];
+			return CacheIndicator<BHKL.BHKLSupportedSpringCrossing>(new BHKL.BHKLSupportedSpringCrossing(){ Period = period, Acceleration = acceleration, AccelerationMax = accelerationMax, AccelerationStep = accelerationStep, BBNumStdDev = bBNumStdDev, BBPeriod = bBPeriod, RStatsGC3Ratio = rStatsGC3Ratio }, input, ref cacheBHKLSupportedSpringCrossing);
 		}
 	}
 }
@@ -497,14 +497,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.SupportedSpringCrossing SupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		public Indicators.BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			return indicator.SupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
+			return indicator.BHKLSupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
 		}
 
-		public Indicators.BHKL.SupportedSpringCrossing SupportedSpringCrossing(ISeries<double> input , int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		public Indicators.BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(ISeries<double> input , int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			return indicator.SupportedSpringCrossing(input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
+			return indicator.BHKLSupportedSpringCrossing(input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
 		}
 	}
 }
@@ -513,14 +513,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.SupportedSpringCrossing SupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		public Indicators.BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			return indicator.SupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
+			return indicator.BHKLSupportedSpringCrossing(Input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
 		}
 
-		public Indicators.BHKL.SupportedSpringCrossing SupportedSpringCrossing(ISeries<double> input , int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
+		public Indicators.BHKL.BHKLSupportedSpringCrossing BHKLSupportedSpringCrossing(ISeries<double> input , int period, double acceleration, double accelerationMax, double accelerationStep, double bBNumStdDev, int bBPeriod, double rStatsGC3Ratio)
 		{
-			return indicator.SupportedSpringCrossing(input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
+			return indicator.BHKLSupportedSpringCrossing(input, period, acceleration, accelerationMax, accelerationStep, bBNumStdDev, bBPeriod, rStatsGC3Ratio);
 		}
 	}
 }

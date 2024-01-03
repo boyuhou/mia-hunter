@@ -26,7 +26,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class TradePlot : Indicator
+	public class BHKLTradePlot : Indicator
 	{
 		private List<MyOrder> myOrders = new List<MyOrder>();
 		protected override void OnStateChange()
@@ -58,15 +58,15 @@ namespace NinjaTrader.NinjaScript.Indicators.BHKL
 				{
 					if (myOrder.Action.Equals("BUY", StringComparison.InvariantCultureIgnoreCase))
 					{
-						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Green);
+						Draw.Dot(this, "BHKLTradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Green);
 					}
 					else if (myOrder.Action.Equals("SELL", StringComparison.InvariantCultureIgnoreCase))
 					{
-						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Red);
+						Draw.Dot(this, "BHKLTradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Red);
 					}
 					else 
 					{
-						Draw.Dot(this, "TradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Purple);
+						Draw.Dot(this, "BHKLTradePlot"+counter.ToString(), true, myOrder.Time, myOrder.AvgPrice, Brushes.Purple);
 					}
 					counter++;
 				}
@@ -166,19 +166,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.TradePlot[] cacheTradePlot;
-		public BHKL.TradePlot TradePlot(string filePath)
+		private BHKL.BHKLTradePlot[] cacheBHKLTradePlot;
+		public BHKL.BHKLTradePlot BHKLTradePlot(string filePath)
 		{
-			return TradePlot(Input, filePath);
+			return BHKLTradePlot(Input, filePath);
 		}
 
-		public BHKL.TradePlot TradePlot(ISeries<double> input, string filePath)
+		public BHKL.BHKLTradePlot BHKLTradePlot(ISeries<double> input, string filePath)
 		{
-			if (cacheTradePlot != null)
-				for (int idx = 0; idx < cacheTradePlot.Length; idx++)
-					if (cacheTradePlot[idx] != null && cacheTradePlot[idx].FilePath == filePath && cacheTradePlot[idx].EqualsInput(input))
-						return cacheTradePlot[idx];
-			return CacheIndicator<BHKL.TradePlot>(new BHKL.TradePlot(){ FilePath = filePath }, input, ref cacheTradePlot);
+			if (cacheBHKLTradePlot != null)
+				for (int idx = 0; idx < cacheBHKLTradePlot.Length; idx++)
+					if (cacheBHKLTradePlot[idx] != null && cacheBHKLTradePlot[idx].FilePath == filePath && cacheBHKLTradePlot[idx].EqualsInput(input))
+						return cacheBHKLTradePlot[idx];
+			return CacheIndicator<BHKL.BHKLTradePlot>(new BHKL.BHKLTradePlot(){ FilePath = filePath }, input, ref cacheBHKLTradePlot);
 		}
 	}
 }
@@ -187,14 +187,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.TradePlot TradePlot(string filePath)
+		public Indicators.BHKL.BHKLTradePlot BHKLTradePlot(string filePath)
 		{
-			return indicator.TradePlot(Input, filePath);
+			return indicator.BHKLTradePlot(Input, filePath);
 		}
 
-		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input , string filePath)
+		public Indicators.BHKL.BHKLTradePlot BHKLTradePlot(ISeries<double> input , string filePath)
 		{
-			return indicator.TradePlot(input, filePath);
+			return indicator.BHKLTradePlot(input, filePath);
 		}
 	}
 }
@@ -203,14 +203,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.TradePlot TradePlot(string filePath)
+		public Indicators.BHKL.BHKLTradePlot BHKLTradePlot(string filePath)
 		{
-			return indicator.TradePlot(Input, filePath);
+			return indicator.BHKLTradePlot(Input, filePath);
 		}
 
-		public Indicators.BHKL.TradePlot TradePlot(ISeries<double> input , string filePath)
+		public Indicators.BHKL.BHKLTradePlot BHKLTradePlot(ISeries<double> input , string filePath)
 		{
-			return indicator.TradePlot(input, filePath);
+			return indicator.BHKLTradePlot(input, filePath);
 		}
 	}
 }

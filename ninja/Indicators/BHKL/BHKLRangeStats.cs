@@ -24,7 +24,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 //This namespace holds Indicators in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Indicators.BHKL
 {
-	public class RangeStats : Indicator
+	public class BHKLRangeStats : Indicator
 	{
 		private double rstats;
 		
@@ -124,19 +124,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 {
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
-		private BHKL.RangeStats[] cacheRangeStats;
-		public BHKL.RangeStats RangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		private BHKL.BHKLRangeStats[] cacheBHKLRangeStats;
+		public BHKL.BHKLRangeStats BHKLRangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			return RangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
+			return BHKLRangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
 		}
 
-		public BHKL.RangeStats RangeStats(ISeries<double> input, double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		public BHKL.BHKLRangeStats BHKLRangeStats(ISeries<double> input, double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			if (cacheRangeStats != null)
-				for (int idx = 0; idx < cacheRangeStats.Length; idx++)
-					if (cacheRangeStats[idx] != null && cacheRangeStats[idx].RStatsGC3Ratio == rStatsGC3Ratio && cacheRangeStats[idx].RStatsRiskRatio == rStatsRiskRatio && cacheRangeStats[idx].UpColor == upColor && cacheRangeStats[idx].DownColor == downColor && cacheRangeStats[idx].EqualsInput(input))
-						return cacheRangeStats[idx];
-			return CacheIndicator<BHKL.RangeStats>(new BHKL.RangeStats(){ RStatsGC3Ratio = rStatsGC3Ratio, RStatsRiskRatio = rStatsRiskRatio, UpColor = upColor, DownColor = downColor }, input, ref cacheRangeStats);
+			if (cacheBHKLRangeStats != null)
+				for (int idx = 0; idx < cacheBHKLRangeStats.Length; idx++)
+					if (cacheBHKLRangeStats[idx] != null && cacheBHKLRangeStats[idx].RStatsGC3Ratio == rStatsGC3Ratio && cacheBHKLRangeStats[idx].RStatsRiskRatio == rStatsRiskRatio && cacheBHKLRangeStats[idx].UpColor == upColor && cacheBHKLRangeStats[idx].DownColor == downColor && cacheBHKLRangeStats[idx].EqualsInput(input))
+						return cacheBHKLRangeStats[idx];
+			return CacheIndicator<BHKL.BHKLRangeStats>(new BHKL.BHKLRangeStats(){ RStatsGC3Ratio = rStatsGC3Ratio, RStatsRiskRatio = rStatsRiskRatio, UpColor = upColor, DownColor = downColor }, input, ref cacheBHKLRangeStats);
 		}
 	}
 }
@@ -145,14 +145,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BHKL.RangeStats RangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		public Indicators.BHKL.BHKLRangeStats BHKLRangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			return indicator.RangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
+			return indicator.BHKLRangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
 		}
 
-		public Indicators.BHKL.RangeStats RangeStats(ISeries<double> input , double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		public Indicators.BHKL.BHKLRangeStats BHKLRangeStats(ISeries<double> input , double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			return indicator.RangeStats(input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
+			return indicator.BHKLRangeStats(input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
 		}
 	}
 }
@@ -161,14 +161,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BHKL.RangeStats RangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		public Indicators.BHKL.BHKLRangeStats BHKLRangeStats(double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			return indicator.RangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
+			return indicator.BHKLRangeStats(Input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
 		}
 
-		public Indicators.BHKL.RangeStats RangeStats(ISeries<double> input , double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
+		public Indicators.BHKL.BHKLRangeStats BHKLRangeStats(ISeries<double> input , double rStatsGC3Ratio, double rStatsRiskRatio, Brush upColor, Brush downColor)
 		{
-			return indicator.RangeStats(input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
+			return indicator.BHKLRangeStats(input, rStatsGC3Ratio, rStatsRiskRatio, upColor, downColor);
 		}
 	}
 }
